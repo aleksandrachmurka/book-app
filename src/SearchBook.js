@@ -15,15 +15,19 @@ class SearchBook extends Component {
 	updateQuery = (query) => {
 		this.setState({query: query})
 		let booksToShow
-		// let books = this.props.books
 		if (query) {
 			BooksAPI.search(query).then(books => {
 				if (books.error) {
 					this.setState({ showingBooks: []})
 				} else {
-				booksToShow = books.map(book => {
-					book.shelf = this.props.updateShelf(book);
-					return book
+					booksToShow = books.map(book => {
+					//big thanks to Edoh for clearing this on Udacity tech webinar
+					const index = this.props.books.findIndex(c=> c.id===book.id)
+					if (index >= 0) {
+						return this.props.books[index]
+					} else {
+						return book
+					}
 				});}
 			this.setState({showingBooks: booksToShow});
 		})}
