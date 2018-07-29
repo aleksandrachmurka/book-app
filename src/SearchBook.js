@@ -27,10 +27,12 @@ class SearchBook extends Component {
 						return this.props.books[index]
 					} else {
 						return book
-					}
-				});}
-			this.setState({showingBooks: booksToShow});
-		})}
+					}})
+					this.setState({showingBooks: booksToShow})
+				}})
+		} else {
+			this.setState({showingBooks: []})
+		}
 	}
 
 	resetQuery = () => {
