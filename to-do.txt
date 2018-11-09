@@ -1,0 +1,80 @@
+Maybe you could add a debounce method here?
+The debounce algorithm, is an easy way to prevent unnecessary requests to the server by simply sending the request when the user stops typing.
+
+You may want to use some of these libraries:
+
+    https://lodash.com/docs/4.17.4#debounce
+    https://github.com/gmcquistin/react-throttle
+Search Book:
+Can you prevent a function from being called too quickly or too many times.
+:link: Debounce: publish changes after a period of inactivity.
+
+Debouncing ensures that a function will not be executed until after a certain amount of time has passed since it was last called. This can be useful when you have to perform some expensive calculation in response to an event that might dispatch rapidly (eg scroll or keyboard events). The example below debounces text input with a 250ms delay.
+
+import debounce from 'lodash.debounce';
+
+class Searchbox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.emitChangeDebounced = debounce(this.emitChange, 250);
+  }
+
+  componentWillUnmount() {
+    this.emitChangeDebounced.cancel();
+  }
+
+  render() {
+    return (
+      <input
+        type="text"
+        onChange={this.handleChange}
+        placeholder="Search..."
+        defaultValue={this.props.value}
+      />
+    );
+  }
+
+  handleChange(e) {
+    // React pools events, so we read the value before debounce.
+    // Alternately we could call `event.persist()` and pass the entire event.
+    // For more info see reactjs.org/docs/events.html#event-pooling
+    this.emitChangeDebounced(e.target.value);
+  }
+
+  emitChange(value) {
+    this.props.onChange(value);
+  }
+}
+
+The implementation above is just an example to demonstrate debounce, making use of it will help to avoid excessive books API calls which takes a lot of data usage.
+
+
+
+List of Books:
+One thing that's important when you are coding is that you should always avoid repetition, if you see something repeat always means that you will be able to automate.
+
+In this specific case you create an object with title and shelf and basically loop through these keys without creating 3 blocks of .bookshelf.
+You should also handle the case when no result is found for a particular query like ax.
+This component should be a stateless component too, see the Book.js file for details of why and when to implement a stateless component.
+
+Book:
+I'd suggest you to use PureComponent instead of Component here to prevent unnecessary re-renders.
+
+PureComponent is exactly like React.Component with one difference: it implements shouldComponentUpdate. This allows it to prevent renders based on some heuristic. It implements this as a shallow equality check on the new props vs the old props, and likewise for state.
+
+But wait! PureComponent might not be the silver bullet for all components. When you have a state/props that are nested, the PureComponent is not a good fit because the checking that it does is really superficial. To make your component fast anyway, you should always implement the shouldComponentUpdate on React.Component.
+
+Here is an example of Component vs Stateless Functional Component vs PureComponent.
+
+You can use placeholder image for books that don't have a thumbnail in API response9
+
+App:
+#protip: Use async + await, here's a special syntax to work with promises in a more comfort fashion. It's surprisingly easy to understand and use. Example:
+
+async componentDidMount() {
+  const books = await BooksAPI.getAll()
+  this.setState({ books })
+}
+
+react-router: You should also create a route to handle 404 page not found error. This is helpful if someone navigates to routes which don't exist in the APP` 
